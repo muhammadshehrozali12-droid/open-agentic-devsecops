@@ -1,0 +1,13 @@
+{
+  "name": "open-agentic-devsecops",
+  "description": "Zero Trust In-Browser DevSecOps & Cloud Security Agent Network",
+  "front_man": "security_auditor",
+  "hocon": "devsecops-network.network.json",
+  "peer_policy": {
+    "allowed_origins": ["*"]
+  },
+  "capabilities": {
+    "mcp_support": true,
+    "browser_runtime": "nsDeploy-compatible"
+  }
+}
