@@ -1,25 +1,64 @@
 {
-  "metadata": {
-    "description": "Enterprise DevSecOps Multi-Agent Security Auditor Network"
+  "protocol_version": "0.2-federated",
+  "network": {
+    "id": "open-agentic-devsecops",
+    "name": "Agentic DevSecOps Guard",
+    "version": "0.2.0",
+    "description": "Zero-Trust in-browser multi-agent auditor for Terraform security and FinOps.",
+    "owner": "shehrozali12-droid.github.io",
+    "conformance": "MVP-0.2"
   },
-  "tools": [
+  "agents": [
     {
+      "id": "security_auditor",
       "name": "security_auditor",
-      "function": {
-        "description": "Scans infrastructure code, Terraform files, and cloud configs for security vulnerabilities."
+      "role": "Front-End Infrastructure and Compliance Auditor",
+      "version": "1.0.0",
+      "status": "active",
+      "capabilities": [
+        "scan_terraform",
+        "detect_open_ports",
+        "detect_hardcoded_secrets",
+        "check_iam_misconfig"
+      ],
+      "delegates_to": ["cost_optimizer", "federated_peer_auditor"],
+      "input_schema": {
+        "type": "terraform_code",
+        "format": "string"
       },
-      "instructions": "Analyze input configurations for hardcoded secrets, IAM misconfigurations, and compliance risks. Delegate deep cost checks to cost_optimizer.",
-      "tools": [
-        "cost_optimizer"
-      ]
+      "output_schema": {
+        "type": "audit_report",
+        "format": "json"
+      }
     },
     {
+      "id": "cost_optimizer",
       "name": "cost_optimizer",
-      "function": {
-        "description": "Analyzes cloud resource utilization and detects FinOps inefficiencies."
-      },
-      "instructions": "Use grounded cloud metrics to suggest cost-saving architectural patches.",
-      "tools": []
+      "role": "FinOps and Compute Downsizing Specialist",
+      "version": "1.0.0",
+      "status": "active",
+      "capabilities": [
+        "analyze_compute_cost",
+        "suggest_rightsizing",
+        "estimate_monthly_savings"
+      ],
+      "delegates_to": []
+    },
+    {
+      "id": "federated_peer_auditor",
+      "name": "federated_peer_auditor",
+      "role": "External Cross-Domain Agent Node (Inter-Agent Protocol)",
+      "version": "1.0.0",
+      "status": "active",
+      "endpoint_type": "remote_federation",
+      "endpoint": "https://shehrozali12-droid.github.io/federated-peer",
+      "protocol": "https",
+      "cors_enabled": true,
+      "description": "Exchanges security posture data with external agentic domains via CORS-compliant runtime bridge.",
+      "capabilities": [
+        "exchange_security_posture",
+        "cross_domain_audit"
+      ]
     }
   ]
 }
