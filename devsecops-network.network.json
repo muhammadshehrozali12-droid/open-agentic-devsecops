@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "description": "Enterprise DevSecOps Multi-Agent Security Auditor Network"
+  },
+  "tools": [
+    {
+      "name": "security_auditor",
+      "function": {
+        "description": "Scans infrastructure code, Terraform files, and cloud configs for security vulnerabilities."
+      },
+      "instructions": "Analyze input configurations for hardcoded secrets, IAM misconfigurations, and compliance risks. Delegate deep cost checks to cost_optimizer.",
+      "tools": [
+        "cost_optimizer"
+      ]
+    },
+    {
+      "name": "cost_optimizer",
+      "function": {
+        "description": "Analyzes cloud resource utilization and detects FinOps inefficiencies."
+      },
+      "instructions": "Use grounded cloud metrics to suggest cost-saving architectural patches.",
+      "tools": []
+    }
+  ]
+}
