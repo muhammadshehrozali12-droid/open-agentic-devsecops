@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agentic DevSecOps Guard | Open Agentic Web</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #131a2a;
+      --border: #243049;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --success: #22c55e;
+      --warn: #f59e0b;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); margin: 0; padding: 16px; line-height: 1.5; }
+    .container { max-width: 920px; margin: 0 auto; }
+    header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 20px; }
+    h1 { font-size: 1.35rem; margin: 0; color: var(--accent); }
+    .badge { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid var(--accent); padding: 4px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media(min-width: 768px) { .grid { grid-template-columns: 2fr 1fr; } }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .card h2 { font-size: 1rem; margin-top: 0; margin-bottom: 12px; color: #e2e8f0; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    textarea, input { width: 100%; background: #090d16; border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 10px; font-size: 0.85rem; margin-bottom: 10px; }
+    textarea { font-family: monospace; min-height: 140px; resize: vertical; }
+    button { background: var(--accent); color: #0b0f19; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; font-size: 0.9rem; }
+    button:hover { background: var(--accent-hover); color: #fff; }
+    button.secondary { background: transparent; border: 1px solid var(--border); color: var(--muted); margin-top: 6px; }
+    .consent-box { display: flex; align-items: flex-start; gap: 8px; font-size: 0.82rem; color: var(--muted); margin-bottom: 12px; background: rgba(245, 158, 11, 0.08); padding: 10px; border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .consent-box input { width: auto; margin-top: 3px; }
+    .output { background: #090d16; border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 0.82rem; white-space: pre-wrap; min-height: 110px; color: #cbd5e1; }
+    .log-list { max-height: 220px; overflow-y: auto; font-family: monospace; font-size: 0.75rem; color: var(--muted); }
+    .log-item { margin-bottom: 6px; border-left: 2px solid var(--accent); padding-left: 8px; }
+    .links { margin-top: 12px; font-size: 0.8rem; }
+    .links a { color: var(--accent); text-decoration: none; margin-right: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>🛡️ Agentic DevSecOps Guard</h1>
+        <small style="color: var(--muted);">Zero-Trust In-Browser Multi-Agent Cloud Auditor (MVP Profile 0.2)</small>
+      </div>
+      <span class="badge" id="statusBadge">Initializing Runtime...</span>
+    </header>
+
+    <div class="grid">
+      <div>
+        <div class="card" style="margin-bottom: 16px;">
+          <h2>1. Infrastructure / Terraform Audit Input</h2>
+          <textarea id="configInput">resource "aws_security_group" "web_sg" {
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+resource "aws_instance" "app" {
+  instance_type = "m5.2xlarge"
+  tags = {
+    aws_secret = "AKIAIOSFODNN7EXAMPLE"
+  }
+}</textarea>
+
+          <div class="consent-box">
+            <input type="checkbox" id="consentCheck" checked />
+            <label for="consentCheck">
+              <strong>Trust Boundary Consent:</strong> Approve local execution of <code>security_auditor</code> &amp; delegation to <code>cost_optimizer</code> within browser origin. Private context remains isolated.
+            </label>
+          </div>
+
+          <button id="runBtn">Run Multi-Agent Security &amp; FinOps Audit</button>
+        </div>
+
+        <div class="card">
+          <h2>2. Multi-Agent Audit Report</h2>
+          <div class="output" id="auditOutput">Ready. Click "Run Multi-Agent Security & FinOps Audit" to execute network...</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom: 16px;">
+          <h2>Pluggable Inference (BYOK)</h2>
+          <p style="font-size: 0.78rem; color: var(--muted); margin-top: 0;">
+            Works out-of-the-box via Default Sandbox Inference, or supply your own OpenAI-compatible key (stored only in browser <code>localStorage</code>).
+          </p>
+          <input type="text" id="routerUrl" placeholder="Router URL (e.g. https://api.openai.com/v1/chat/completions)" />
+          <input type="text" id="modelName" placeholder="Model (e.g. gpt-4o-mini)" />
+          <input type="password" id="apiKey" placeholder="Optional API Key (sk-...)" />
+          <button id="saveByokBtn">Save BYOK Config</button>
+          <button id="clearByokBtn" class="secondary">Purge Stored Key</button>
+        </div>
+
+        <div class="card">
+          <h2>Observable Execution Trace</h2>
+          <div class="log-list" id="traceLogs"></div>
+          <div class="links">
+            <a href="./agent-manifest.json" target="_blank">📄 agent-manifest.json</a>
+            <a href="./devsecops-network.network.json" target="_blank">🕸️ network.json</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./runtime.js"></script>
+  <script>
+    const runtime = new OpenAgenticRuntime();
+    const traceEl = document.getElementById('traceLogs');
+    const badgeEl = document.getElementById('statusBadge');
+    const outputEl = document.getElementById('auditOutput');
+
+    function renderLogs() {
+      traceEl.innerHTML = runtime.executionLogs.map(l =>
+        `<div class="log-item"><strong>[${l.stage}]</strong> ${l.message}</div>`
+      ).join('');
+      traceEl.scrollTop = traceEl.scrollHeight;
+    }
+
+    (async () => {
+      try {
+        await runtime.init();
+        badgeEl.textContent = 'MVP 0.2 Conforming ✓';
+        badgeEl.style.color = '#22c55e';
+        badgeEl.style.borderColor = '#22c55e';
+        document.getElementById('routerUrl').value = runtime.routerUrl;
+        document.getElementById('modelName').value = runtime.activeModel;
+        document.getElementById('apiKey').value = runtime.activeKey;
+      } catch (err) {
+        badgeEl.textContent = 'Runtime Error';
+        outputEl.textContent = err.message;
+      }
+      renderLogs();
+    })();
+
+    document.getElementById('saveByokBtn').addEventListener('click', () => {
+      runtime.saveBYOK(
+        document.getElementById('routerUrl').value,
+        document.getElementById('modelName').value,
+        document.getElementById('apiKey').value
+      );
+      renderLogs();
+      alert('BYOK Configuration saved locally in browser.');
+    });
+
+    document.getElementById('clearByokBtn').addEventListener('click', () => {
+      runtime.clearBYOK();
+      document.getElementById('apiKey').value = '';
+      renderLogs();
+    });
+
+    document.getElementById('runBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('runBtn');
+      btn.disabled = true;
+      btn.textContent = 'Agents Executing...';
+      outputEl.textContent = 'Validating trust boundary and delegating to agents...';
+      try {
+        const res = await runtime.runAudit(
+          document.getElementById('configInput').value,
+          document.getElementById('consentCheck').checked
+        );
+        outputEl.textContent = `Mode: ${res.mode}\nFront Agent: ${res.frontAgent} -> Delegated To: ${res.delegatedTo}\n\n${res.report}`;
+      } catch (err) {
+        outputEl.textContent = `❌ Execution Halted (Fail-Closed):\n${err.message}`;
+      }
+      renderLogs();
+      btn.disabled = false;
+      btn.textContent = 'Run Multi-Agent Security & FinOps Audit';
+    });
+  </script>
+</body>
+</html>
