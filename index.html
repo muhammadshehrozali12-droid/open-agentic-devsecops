@@ -1,10 +1,11 @@
-<!-- SUPER PRO Enterprise Inter-Agent Federation Panel -->
+<!-- ✅ DEBUGGED & FIXED: SUPER PRO Federation Panel - FINAL VERSION -->
+<script src="runtime.js"></script>
+<!-- FIX 2: runtime.js AB PANEL SE PEHLE HAI, ISLIYE not defined ERROR NAHI AAYEGA -->
+
 <div style="background: linear-gradient(135deg, #0F172A 0%, #0B1226 100%); border: 1px solid rgba(56,189,248,0.35); border-radius: 16px; padding: 20px; margin-top: 24px; box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5); font-family: Inter, system-ui, sans-serif; overflow: hidden; position: relative;">
     
-    <!-- Top Glow Line -->
     <div style="position:absolute; top:0; left:0; right:0; height:3px; background: linear-gradient(90deg, #38bdf8, #22c55e, #f59e0b);"></div>
 
-    <!-- Header -->
     <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
         <div>
             <h3 style="color:#fff; font-size:17px; margin:0; font-weight:800; letter-spacing:-0.2px;">🌐 Inter-Agent Federation <span style="background:rgba(56,189,248,0.15); color:#38bdf8; font-size:10px; padding:3px 8px; border-radius:999px; vertical-align:middle; margin-left:6px; font-weight:700;">LIVE MESH • MVP 0.2</span></h3>
@@ -13,19 +14,19 @@
         <div id="fedStatusBadge" style="background:#1e293b; color:#94a3b8; font-size:11px; font-weight:700; padding:6px 10px; border-radius:999px; border:1px solid #334155;">● IDLE - NOT CONNECTED</div>
     </div>
 
-    <!-- Input Row -->
     <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap;">
         <div style="flex:1; min-width:240px; display:flex; align-items:center; background:#020617; border:1px solid #1e293b; border-radius:10px; padding:0 12px;">
             <span style="font-size:13px;">🔗</span>
-            <input type="text" id="peerAgentUrl" value="https://shehrozali12-droid.github.io" placeholder="https://peer-agent-site.com" style="flex:1; background:transparent; border:none; outline:none; color:#f8fafc; padding:12px 8px; font-size:13px; font-family:monospace;" />
-            <button onclick="document.getElementById('peerAgentUrl').value='https://shehrozali12-droid.github.io'" style="background:none; border:none; color:#38bdf8; font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap;">USE MY SITE</button>
+            <!-- FIX 1: Sahi URL - muhammadshehrozali12 + /open-agentic-devsecops -->
+            <input type="text" id="peerAgentUrl" value="https://muhammadshehrozali12-droid.github.io/open-agentic-devsecops" placeholder="https://peer-agent-site.com" style="flex:1; background:transparent; border:none; outline:none; color:#f8fafc; padding:12px 8px; font-size:13px; font-family:monospace;" />
+            <button onclick="document.getElementById('peerAgentUrl').value='https://muhammadshehrozali12-droid.github.io/open-agentic-devsecops'" style="background:none; border:none; color:#38bdf8; font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap;">USE MY SITE</button>
         </div>
         <button id="fedSyncBtn" onclick="runFederationSync()" style="background:#38bdf8; color:#020617; border:none; padding:12px 20px; border-radius:10px; font-weight:800; cursor:pointer; font-size:13px; box-shadow:0 8px 20px -6px rgba(56,189,248,0.6);">⚡ Sync Mesh →</button>
         <button onclick="copyFederationResult()" style="background:#0f172a; color:#e2e8f0; border:1px solid #334155; padding:12px 14px; border-radius:10px; font-weight:700; cursor:pointer; font-size:12px;">Copy JSON</button>
     </div>
 
-    <!-- Result Cards - Pehle hidden -->
-    <div id="fedResultCards" style="display:none; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-bottom:12px;">
+    <!-- FIX 4: Mobile fix - 1fr 1fr 1fr ki jagah auto-fit -->
+    <div id="fedResultCards" style="display:none; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:10px; margin-bottom:12px;">
         <div style="background:#020617; border:1px solid #1e293b; border-radius:10px; padding:12px;">
             <div style="font-size:10px; color:#94a3b8; font-weight:700; letter-spacing:0.5px;">PEER AGENT</div>
             <div id="fedPeerName" style="color:#fff; font-weight:800; font-size:14px; margin-top:4px; word-break:break-all;">—</div>
@@ -43,7 +44,6 @@
         </div>
     </div>
 
-    <!-- Log Output -->
     <pre id="federationOutput" style="background:#020617; color:#a5f3fc; padding:14px; border-radius:10px; font-size:11.5px; overflow-x:auto; display:none; font-family:ui-monospace, monospace; line-height:1.6; border:1px solid #1e293b; margin:0; white-space:pre-wrap;"></pre>
 
     <div style="display:flex; gap:16px; margin-top:12px; flex-wrap:wrap; font-size:11px; color:#64748b;">
@@ -63,7 +63,15 @@ async function runFederationSync() {
 
     if (!targetUrl) { alert('Please enter a peer domain URL'); return; }
 
-    // Loading State - Real, not fake
+    // FIX 3: Safety Check - Agar runtime.js load nahi hua to crash nahi hoga
+    if (typeof executeFederatedAgentHandshake !== 'function') {
+        out.style.display = 'block';
+        out.textContent = '[ERROR] executeFederatedAgentHandshake is not defined.\nCheck: runtime.js is loaded BEFORE this panel.\nExpected: <script src="runtime.js"></script> on top.';
+        badge.textContent = '● RUNTIME NOT LOADED';
+        badge.style.background = '#450a0a'; badge.style.color = '#fca5a5';
+        return;
+    }
+
     btn.disabled = true;
     btn.textContent = '⏳ Handshaking...';
     btn.style.opacity = '0.7';
@@ -75,8 +83,6 @@ async function runFederationSync() {
     try {
         const result = await executeFederatedAgentHandshake(targetUrl);
         lastFedResult = result;
-
-        // Success / Fail UI
         const isSuccess = result.status === 'SECURE_FEDERATION_ESTABLISHED';
         
         badge.textContent = isSuccess ? '● SECURE FEDERATION ESTABLISHED' : '● FEDERATION FAILED';
@@ -95,9 +101,7 @@ async function runFederationSync() {
         } else {
             cards.style.display = 'none';
         }
-
         out.textContent += `\n\n${JSON.stringify(result, null, 2)}`;
-
     } catch (e) {
         out.textContent += `\n\n[ERROR] ${e.message}`;
         badge.textContent = '● ERROR';
