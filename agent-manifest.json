@@ -2,29 +2,42 @@
   "schema_version": "0.2.0",
   "protocol": "open-agentic-web-nanda-v0.2",
   "name": "Agentic DevSecOps Guard",
-  "description": "Zero-Trust In-Browser Multi-Agent Cloud Security, FinOps Auditor & Auto-Remediator",
+  "description": "Zero-Trust In-Browser Multi-Agent Cloud Security, FinOps Auditor, AI DevSecOps Engineer & Auto-Remediator",
   "author": "Muhammad Shehroz Ali",
-  "homepage": "https://github.io",
+  "homepage": "https://muhammadshehrozali12-droid.github.io/open-agentic-devsecops/",
   "runtime": "./runtime.js",
   "capabilities": [
     {
       "id": "audit_terraform",
       "name": "Multi-Agent Security & FinOps Audit",
-      "description": "Scans Terraform HCL code for CVE misconfigurations, hardcoded secrets, and oversized cloud instances.",
-      "input_schema": {
-        "type": "string",
-        "format": "terraform-hcl"
-      }
+      "description": "Scans Terraform HCL for misconfigurations, hardcoded secrets, IAM wildcards and oversized or untagged resources. Returns a risk score and findings.",
+      "input_schema": { "type": "string", "format": "terraform-hcl" }
     },
     {
       "id": "remediate_terraform",
       "name": "Zero-Trust Auto-Remediation Agent",
-      "description": "Receives findings from Security and FinOps agents to generate hardened Terraform code."
+      "description": "Generates hardened Terraform, then re-scans it with a verifier agent. Remote findings are never trusted; the code is always re-audited locally.",
+      "input_schema": {
+        "type": "object",
+        "properties": { "terraform": { "type": "string", "format": "terraform-hcl" } },
+        "required": ["terraform"]
+      }
+    },
+    {
+      "id": "generate_pipeline",
+      "name": "DevSecOps Pipeline Generator",
+      "description": "Returns a GitHub Actions workflow that blocks insecure Terraform (fmt, validate, tfsec, Checkov).",
+      "input_schema": { "type": "object", "properties": {} }
     }
   ],
+  "invoke": {
+    "type": "window.postMessage",
+    "request": { "type": "agent-call", "id": "<unique string>", "capability": "<capability id>", "input": "<see input_schema>" },
+    "response": { "type": "agent-response", "id": "<same id>", "ok": "<boolean>", "result": "<object>", "error": "<string, when ok is false>" }
+  },
   "federation": {
     "cors_enabled": true,
     "accepts_remote_calls": true,
-    "public_endpoint": "https://github.ioagent-manifest.json"
+    "public_endpoint": "https://muhammadshehrozali12-droid.github.io/open-agentic-devsecops/agent-manifest.json"
   }
 }
