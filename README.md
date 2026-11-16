@@ -1,7 +1,7 @@
 # 🛡️ Agentic DevSecOps Guard — MVP 0.2
 ### Zero-Trust In-Browser Multi-Agent Cloud Auditor & Federated Policy Mesh
 
-**Live App:** https://shehrozali12-droid.github.io/open-agentic-devsecops/
+
 
 **Scan Terraform in your browser. No server. No data leaves your device.**
 
