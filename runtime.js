@@ -1,4 +1,4 @@
-// runtime.js - Open Agentic Web Browser Runtime (NANDA v0.2 Conforming)
+// runtime.js - Open Agentic Web Browser Runtime (NANDA v0.2 Conforming - Fixed)
 
 class AgenticDevSecOpsRuntime {
   constructor() {
@@ -18,7 +18,6 @@ class AgenticDevSecOpsRuntime {
     return entry;
   }
 
-  // Public Agent Invocation Interface (Callable by External Agentic Sites)
   async invokeCapability(capabilityId, payload) {
     if (capabilityId === "audit_terraform" || capabilityId === "remediate_terraform") {
       return await this.runMultiAgentAudit(String(payload || ""));
@@ -60,12 +59,12 @@ class AgenticDevSecOpsRuntime {
     }
 
     // Rule 3: IAM Wildcard Privilege Escalation
-    if (/"Action"\s*:\s*"\*"|Action\s*=\s*\[\s*"\*"\s*\]/.test(tfCode)) {
+    if (/Action\s*=\s*["']\*["']|"Action"\s*:\s*["']\*["']|Action\s*=\s*\[\s*["']\*["']\s*\]/.test(tfCode)) {
       findings.push({
         type: "CRITICAL",
         agent: "ZeroTrust-SecAgent",
         ruleId: "IAM-LEAST-PRIV",
-        title: "Over-Permissive IAM Wildcard ('Action': '*')",
+        title: "Over-Permissive IAM Wildcard (Action = '*')",
         fix: "Enforce Least Privilege by scoping IAM actions to specific required AWS service APIs."
       });
       score -= 30;
@@ -152,7 +151,7 @@ class AgenticDevSecOpsRuntime {
     let safe = tfCode;
     safe = safe.replace(/["']0\.0\.0\.0\/0["']/g, '"10.0.0.0/16" # Hardened by AutoFix-Agent');
     safe = safe.replace(/(password|secret_key|access_key|api_key|token)\s*=\s*["'][^"']+["']/gi, '$1 = var.aws_secret_value # Migrated to AWS Secrets Manager');
-    safe = safe.replace(/"Action"\s*:\s*"\*"/g, '"Action": "s3:GetObject" # Scoped to Least Privilege');
+    safe = safe.replace(/Action\s*=\s*["']\*["']/g, 'Action = "s3:GetObject" # Scoped to Least Privilege');
     safe = safe.replace(/(m5\.2xlarge|c5\.4xlarge|t3\.2xlarge|r5\.xlarge)/g, 't4g.medium');
     return safe;
   }
@@ -252,4 +251,4 @@ class AgenticDevSecOpsRuntime {
 
 window.AgenticRuntime = new AgenticDevSecOpsRuntime();
 window.invokeAgent = (capabilityId, payload) => window.AgenticRuntime.invokeCapability(capabilityId, payload);
-  
+        
