@@ -1,13 +1,30 @@
 {
-  "name": "open-agentic-devsecops",
-  "description": "Zero Trust In-Browser DevSecOps & Cloud Security Agent Network",
-  "front_man": "security_auditor",
-  "hocon": "devsecops-network.network.json",
-  "peer_policy": {
-    "allowed_origins": ["*"]
-  },
-  "capabilities": {
-    "mcp_support": true,
-    "browser_runtime": "nsDeploy-compatible"
+  "schema_version": "0.2.0",
+  "protocol": "open-agentic-web-nanda-v0.2",
+  "name": "Agentic DevSecOps Guard",
+  "description": "Zero-Trust In-Browser Multi-Agent Cloud Security, FinOps Auditor & Auto-Remediator",
+  "author": "Muhammad Shehroz Ali",
+  "homepage": "https://github.io",
+  "runtime": "./runtime.js",
+  "capabilities": [
+    {
+      "id": "audit_terraform",
+      "name": "Multi-Agent Security & FinOps Audit",
+      "description": "Scans Terraform HCL code for CVE misconfigurations, hardcoded secrets, and oversized cloud instances.",
+      "input_schema": {
+        "type": "string",
+        "format": "terraform-hcl"
+      }
+    },
+    {
+      "id": "remediate_terraform",
+      "name": "Zero-Trust Auto-Remediation Agent",
+      "description": "Receives findings from Security and FinOps agents to generate hardened Terraform code."
+    }
+  ],
+  "federation": {
+    "cors_enabled": true,
+    "accepts_remote_calls": true,
+    "public_endpoint": "https://github.ioagent-manifest.json"
   }
 }
