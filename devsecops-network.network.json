@@ -1,64 +1,34 @@
 {
-  "protocol_version": "0.2-federated",
-  "network": {
-    "id": "open-agentic-devsecops",
-    "name": "Agentic DevSecOps Guard",
-    "version": "0.2.0",
-    "description": "Zero-Trust in-browser multi-agent auditor for Terraform security and FinOps.",
-    "owner": "shehrozali12-droid.github.io",
-    "conformance": "MVP-0.2"
-  },
-  "agents": [
+  "network_id": "agentic-devsecops-guard-mesh",
+  "protocol": "open-agentic-web-nanda-v0.2",
+  "entry_agent": "orchestrator-agent",
+  "nodes": [
     {
-      "id": "security_auditor",
-      "name": "security_auditor",
-      "role": "Front-End Infrastructure and Compliance Auditor",
-      "version": "1.0.0",
-      "status": "active",
-      "capabilities": [
-        "scan_terraform",
-        "detect_open_ports",
-        "detect_hardcoded_secrets",
-        "check_iam_misconfig"
-      ],
-      "delegates_to": ["cost_optimizer", "federated_peer_auditor"],
-      "input_schema": {
-        "type": "terraform_code",
-        "format": "string"
-      },
-      "output_schema": {
-        "type": "audit_report",
-        "format": "json"
-      }
+      "id": "orchestrator-agent",
+      "role": "Coordinator & Policy Router",
+      "execution": "in-browser-runtime",
+      "delegates_to": ["zerotrust-sec-agent", "cloudcost-finops-agent", "autofix-remediation-agent"]
     },
     {
-      "id": "cost_optimizer",
-      "name": "cost_optimizer",
-      "role": "FinOps and Compute Downsizing Specialist",
-      "version": "1.0.0",
-      "status": "active",
-      "capabilities": [
-        "analyze_compute_cost",
-        "suggest_rightsizing",
-        "estimate_monthly_savings"
-      ],
-      "delegates_to": []
+      "id": "zerotrust-sec-agent",
+      "role": "CVE, CIS Benchmark & Secrets Auditor",
+      "checks": ["OPEN_INGRESS_CIDR", "HARDCODED_SECRETS", "UNENCRYPTED_S3", "IAM_WILDCARD_PRIVILEGE"]
     },
     {
-      "id": "federated_peer_auditor",
-      "name": "federated_peer_auditor",
-      "role": "External Cross-Domain Agent Node (Inter-Agent Protocol)",
-      "version": "1.0.0",
-      "status": "active",
-      "endpoint_type": "remote_federation",
-      "endpoint": "https://shehrozali12-droid.github.io/federated-peer",
-      "protocol": "https",
-      "cors_enabled": true,
-      "description": "Exchanges security posture data with external agentic domains via CORS-compliant runtime bridge.",
-      "capabilities": [
-        "exchange_security_posture",
-        "cross_domain_audit"
-      ]
+      "id": "cloudcost-finops-agent",
+      "role": "Cloud Compute Right-Sizing & Savings Estimator",
+      "checks": ["OVERSIZED_EC2_INSTANCE", "GRAVITON_ARM_MIGRATION"]
+    },
+    {
+      "id": "autofix-remediation-agent",
+      "role": "Automated Hardened HCL Code Synthesizer",
+      "output": "production-ready-terraform"
     }
+  ],
+  "edges": [
+    { "from": "orchestrator-agent", "to": "zerotrust-sec-agent", "event": "SCAN_SECURITY" },
+    { "from": "zerotrust-sec-agent", "to": "cloudcost-finops-agent", "event": "HANDOFF_COST_AUDIT" },
+    { "from": "cloudcost-finops-agent", "to": "autofix-remediation-agent", "event": "SYNTHESIZE_PATCH" },
+    { "from": "autofix-remediation-agent", "to": "orchestrator-agent", "event": "RETURN_VERIFIED_REPORT" }
   ]
 }
