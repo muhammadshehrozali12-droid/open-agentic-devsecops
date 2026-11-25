@@ -1,6 +1,17 @@
 {
   "network_id": "agentic-devsecops-guard-mesh",
   "protocol": "open-agentic-web-nanda-v0.2",
+    "llm": {
+    "mode": "bring-your-own-key",
+    "note": "User brings his own key, his own model, his own provider. App does not supply tokens. Judges pay for their own LLM tokens.",
+    "supported": ["OpenAI", "Claude", "Groq", "DeepSeek", "Qwen 2.5 3B Local", "Otari Local Gateway"],
+    "small_model_note": "Supports small 3B-parameter model locally. Each agent has one simple task so small models work well."
+  },
+  "consent": {
+    "rule": "Every time this site connects to another agent network, it must ask the user: Do you want to allow this agent to connect to another agent network? [Allow] [Deny]",
+    "irreversible_action_rule": "If agent takes irreversible action on another website, show consent pop-up first."
+  },
+  "built_on": "Android mobile only, GitHub Mobile App, No laptop. Designed mobile-first for limited connectivity.",
   "entry_agent": "orchestrator-agent",
   "nodes": [
     {
