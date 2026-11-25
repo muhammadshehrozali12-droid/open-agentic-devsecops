@@ -115,5 +115,25 @@ function copyManifestJson() {
     alert('Manifest URL copied to clipboard!');
 }
 </script>
+    <!-- Consent Popup - Open Agentic Web Spec -->
+<div id="consentPopup" style="display:none; position:fixed; bottom:20px; left:20px; right:20px; background:#111; color:#fff; padding:16px; border-radius:12px; z-index:9999;">
+  <p style="margin:0 0 12px 0;">Do you want to allow this agent to connect to another agent network?</p>
+  <button onclick="allowAgent()" style="background:#00ff88; border:none; padding:10px 20px; border-radius:8px; font-weight:bold; margin-right:10px;">Allow</button>
+  <button onclick="denyAgent()" style="background:#ff4444; color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:bold;">Deny</button>
+</div>
+<script>
+function askConsent() {
+  document.getElementById('consentPopup').style.display = 'block';
+}
+function allowAgent() {
+  document.getElementById('consentPopup').style.display = 'none';
+  alert('Allowed: Agent can connect to another agent network.');
+}
+function denyAgent() {
+  document.getElementById('consentPopup').style.display = 'none';
+  alert('Denied: Agent will NOT connect.');
+}
+setTimeout(askConsent, 2000);
+</script>
 </body>
 </html>
