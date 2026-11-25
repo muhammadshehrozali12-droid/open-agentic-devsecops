@@ -1,0 +1,28 @@
+{
+  "spec": "open-agentic-web-v1",
+  "site": "Agentic DevSecOps Guard",
+  "actions": [
+    {
+      "id": "verify-agent",
+      "description": "Verify agent identity and permissions",
+      "needs_consent": false
+    },
+    {
+      "id": "estimate-cost",
+      "description": "Estimate LLM cost for user key",
+      "needs_consent": false
+    },
+    {
+      "id": "suggest-fix",
+      "description": "Suggest fix for insecure config, does NOT apply without user Allow",
+      "needs_consent": true,
+      "consent_text": "Do you want to allow this agent to apply this fix?"
+    },
+    {
+      "id": "connect-to-other-network",
+      "description": "Connect to another agent network",
+      "needs_consent": true,
+      "consent_text": "Do you want to allow this agent to connect to another agent network? [Allow] [Deny]"
+    }
+  ]
+}
